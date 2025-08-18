@@ -46,25 +46,139 @@ fun main() {
     testExceptMethod()
 
     testInterfaceMetond()
+
+    testExMethod()
+
+    testDataMethod()
+}
+
+fun testDataMethod() {
+    //对象声明和拷贝
+
+    //对象结构方式提取
+
+    // Pair 和 Triple 测试
+
+    //密封类型
+
+}
+
+open class D4 {
+
+}
+
+class DD4 : D4() {
+
+}
+
+open class C4 {
+    open fun D4.foo() {
+        println("C4 in D4.foo")
+    }
+
+    open fun DD4.foo() {
+        println("C4 in DD4.foo")
+    }
+
+    fun cutl(d: D4) {
+        d.foo()
+    }
+
+}
+class CC4 : C4() {
+    override fun D4.foo() {
+        println("Cc4 in D4.foo")
+    }
+
+    override fun DD4.foo() {
+        println("CC4 in DD4.foo")
+    }
+
 }
 
 fun testExMethod() {
     //定义User类
-
+    val user = User2()
+    user.print()
     //List 值交换
-
+    val list = mutableListOf(1, 2, 3)
+    list.swap(0, 2)
+    println(list)
     //扩展函数是静态解析的，并不是接收者类型的虚拟成员，在调用扩展函数时，具体被调用的的是哪一个函数，由调用函数的的对象表达式来决定的，而不是动态的类型决定的:
-
+    print2(D3())
     //拓展函数和成员函数一致优先使用成员函数
-
+    var c = C3()
+    c.print()
     //拓展空对象
-
+    println(c.to())
     //属性拓展 不允许赋值，只允许通过get /  set 方式设置
-
-    // companion关键字定义伴生对象
-
+    //companion关键字定义伴生对象
+    T1.Companion.max()
+    T1.Companion.name
     //拓展函数导入作用域
+    C4().cutl(D4())
+    C4().cutl(DD4())
+    CC4().cutl(D4())
+    CC4().cutl(DD4())
 }
+
+class User2 {
+
+}
+
+fun User2.print() {
+    println("MyUser:$this")
+}
+
+
+fun <T> MutableList<T>.swap(index:Int, index2:Int){
+    val t = this[index]
+    this[index] = this[index2]
+    this[index2] = t
+}
+
+open class C3 {
+    fun print() {
+        println("我是成员函数")
+    }
+}
+
+class D3 : C3() {
+    var age = 0
+}
+
+val D3.age: String get() = ""
+
+val <T> List<T>.lastIndex1: Int get() = size - 1
+
+fun C3.print() {
+    println("C3")
+}
+
+fun D3.print() {
+    println("D3")
+}
+
+fun print2(c: C3) {
+    c.print()
+}
+fun Any?.to(): String {
+    if (this == null) return "null"
+    return toString()
+}
+class T1 {
+
+    companion object {
+        var name:String = ""
+    }
+
+}
+val T1.Companion.nane get() = ""
+
+fun T1.Companion.max() {
+    println("伴生")
+}
+
 
 fun testInterfaceMetond() {
     //通过interface 定义接口 接口可有默认实现
