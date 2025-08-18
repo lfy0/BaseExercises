@@ -42,17 +42,69 @@ fun main() {
     testForMethod()
 
     testClassMethod()
+    testExceptMethod()
 }
-
 fun testExceptMethod() {
     //子类实现继承要接着调用父类的构造方法
-
     //子类有构造函数
-
+    val dog = Dog1(1, "dog", 1)
     //子类没构造函数
-
+    val cat = Cat1(1, "cat")
     //重写方法 需要加open
+    dog.wow()
+    cat.wow()
+    //通过 open 和 override 重写属性
+    println(dog.name)
+    println(cat.name)
+    println(dog.phone)
+    println(dog.age)
+    //可以通过var 属性重写val 但是不能通过val 重写var
 }
+
+open class Animal1(a: Int, b: String) {
+    open var name: String = "未知姓名"
+    open val age: Int = 0
+    open val phone = 0;
+    open fun wow() {
+        println("未知叫声")
+    }
+}
+
+class Dog1(a: Int, b: String, c: Int) : Animal1(a, b) {
+
+    override var name: String = "狗"
+    override var age: Int = 1
+    override val phone: Int
+        get() = 110
+
+    override fun wow() {
+        println("汪汪汪")
+    }
+
+}
+
+class Cat1 : Animal1 {
+
+    override var name: String
+        get() = "猫:咪咪"
+        set(value) {}
+
+    override val age: Int
+        get() = 1
+
+    override val phone: Int
+        get() = 555
+
+    constructor(a: Int, b: String) : super(a, b)
+
+    constructor(a: Int, b: String, c: Int) : this(c, b)
+
+    override fun wow() {
+        println("喵喵喵")
+    }
+
+}
+
 open class Test3 {
     constructor(age: Int)
     constructor(age: Int, name: String)
