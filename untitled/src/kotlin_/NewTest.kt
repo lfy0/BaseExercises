@@ -42,8 +42,90 @@ fun main() {
     testForMethod()
 
     testClassMethod()
+
     testExceptMethod()
+
+    testInterfaceMetond()
 }
+
+fun testExMethod() {
+    //定义User类
+
+    //List 值交换
+
+    //扩展函数是静态解析的，并不是接收者类型的虚拟成员，在调用扩展函数时，具体被调用的的是哪一个函数，由调用函数的的对象表达式来决定的，而不是动态的类型决定的:
+
+    //拓展函数和成员函数一致优先使用成员函数
+
+    //拓展空对象
+
+    //属性拓展 不允许赋值，只允许通过get /  set 方式设置
+
+    // companion关键字定义伴生对象
+
+    //拓展函数导入作用域
+}
+
+fun testInterfaceMetond() {
+    //通过interface 定义接口 接口可有默认实现
+    //接口中允许有属性值但是只能抽象，实现接口必须实现接口属性值
+    val c2 = C2()
+    c2.foo()
+    c2.bar()
+    val d2 = D2()
+    d2.foo()
+    d2.bar()
+    println(d2.date)
+    //接口重写可能会遇到多个接口同一方法名的问题
+}
+
+interface A2 {
+
+    var date: String
+
+    fun foo() {
+        println("A2")
+    }
+
+    fun bar()
+}
+
+interface B2 {
+    fun foo() {
+        println("B2")
+    }
+
+    fun bar() {
+        println("bar")
+    }
+}
+
+class C2 : A2 {
+
+    override var date: String = "1"
+
+    override fun bar() {
+        println("bar")
+    }
+
+}
+
+class D2() : A2, B2 {
+    override var date: String = "111"
+
+    override fun foo() {
+        super<A2>.foo()
+        super<B2>.foo()
+    }
+
+    override fun bar() {
+        super<B2>.bar()
+    }
+
+
+}
+
+
 fun testExceptMethod() {
     //子类实现继承要接着调用父类的构造方法
     //子类有构造函数
@@ -70,7 +152,41 @@ open class Animal1(a: Int, b: String) {
     }
 }
 
-class Dog1(a: Int, b: String, c: Int) : Animal1(a, b) {
+open class A1 {
+    open fun f() {
+        print("A")
+    }
+
+    fun a() {
+        print("a")
+    }
+}
+
+interface B1 {
+    fun f() {
+        print("B")
+    } //接口的成员变量默认是 open 的
+
+    fun b() {
+        print("b")
+    }
+}
+
+class C1() : A1(), B1 {
+    override fun f() {
+        TODO("Not yet implemented")
+        super<A1>.f()
+        super<B1>.f()
+    }
+}
+
+interface AnimalAction {
+    fun wow() {
+        println("动物叫")
+    }
+}
+
+class Dog1(a: Int, b: String, c: Int) : Animal1(a, b), AnimalAction {
 
     override var name: String = "狗"
     override var age: Int = 1
@@ -79,6 +195,8 @@ class Dog1(a: Int, b: String, c: Int) : Animal1(a, b) {
 
     override fun wow() {
         println("汪汪汪")
+        super<AnimalAction>.wow()
+        super<Animal1>.wow()
     }
 
 }
@@ -113,6 +231,7 @@ open class Test3 {
 class TT(name: String) : Test3(0, name) {
 
 }
+
 fun testClassMethod() {
 
     //可以定义一个类和一个空类，类里也可以有方法
@@ -138,7 +257,7 @@ fun testClassMethod() {
 
     /*次级构造函数 通过constructor声明 次级构造函数要间接调用主构造函数  一个非抽象类如果没有写主构造函数会创建一个空的公共的构造函数
     * 可以将其私有化 */
-    val tCalss:TestClass1 = TestClass1()
+    val tCalss: TestClass1 = TestClass1()
     //次级构造函数可以加入排名 在次级构造函数显示排名 init块显示网站名
 
     //抽象类实现 open一个类 里面提供方法 继承他的抽象类克实现他的 方法，也可将他的方法继续抽象
@@ -166,7 +285,7 @@ class TestClass3(name: String, age: Int) {
     var name = ""
     var age = 0
 
-    constructor(name: String): this(name,0)
+    constructor(name: String) : this(name, 0)
 
     init {
         this.name = name
@@ -176,9 +295,9 @@ class TestClass3(name: String, age: Int) {
 
 class TestClass2 {
 
-    lateinit var t:TestInterface
+    lateinit var t: TestInterface
 
-    fun setUp(inter:TestInterface) {
+    fun setUp(inter: TestInterface) {
         t = inter
     }
 
@@ -191,7 +310,6 @@ class TestClass2 {
 interface TestInterface {
     fun result()
 }
-
 
 
 open class Wither {
@@ -209,13 +327,14 @@ open class Wither {
     }
 }
 
-open class Wther{
-    class Owner{
-        fun  foo(){
+open class Wther {
+    class Owner {
+        fun foo() {
             println("owner foo")
         }
     }
 }
+
 //抽象类
 open class Animal {
     open fun cry() {
@@ -230,7 +349,7 @@ abstract class Dog : Animal() {
 class TestClass1 {
     var name: String = ""
     var age: Int = 0
-   // private constructor()
+    // private constructor()
 }
 
 class W3Shool(name: String) {
@@ -244,12 +363,12 @@ class W3Shool(name: String) {
         println("我的网站名是:$name")
     }
 
-    constructor(name:String,arx:Int):this(name){
+    constructor(name: String, arx: Int) : this(name) {
         println("我的网站排名：$arx")
         this.arx = arx
     }
 
-    fun printLine(){
+    fun printLine() {
         println("网址：" + url)
         println("国家：" + cun)
         println("网站名：" + name)
@@ -319,9 +438,6 @@ class MProject {
         println(age)
     }
 }
-
-
-
 
 
 fun testForMethod() {
@@ -421,10 +537,10 @@ fun testForMethod() {
     println("----------------------------------------")
     // forEach 从标签处返回landbad
     loopArr.forEach(
-            fun(value: Int) {
-                println("value = $value")
-                return
-            }
+        fun(value: Int) {
+            println("value = $value")
+            return
+        }
     )
     //函数字面量
     println(cul(1, 2) { x, y -> x + y })
