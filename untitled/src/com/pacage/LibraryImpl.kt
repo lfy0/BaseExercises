@@ -1,7 +1,5 @@
 package com.pacage
 
-import kotlin_.b
-
 
 class LibraryImpl : LibraryInterface {
 
@@ -50,7 +48,7 @@ class LibraryImpl : LibraryInterface {
         for (b in books) {
             if (b.number == index) {
                 books.remove(b)
-                booksStatus[b] = Status.OUT
+                booksStatus.remove(b)
                 return 0;
             }
         }
@@ -64,10 +62,12 @@ class LibraryImpl : LibraryInterface {
         return Status.OUT
     }
 
-    override fun outBook(b: Book): Int {
-        return if (books.contains(b)) {
-            books.remove(b)
-            booksStatus[b] = Status.OUT
+    override fun outBook(book: Book): Int {
+        return if (books.contains(book) &&
+            booksStatus.containsKey(book) &&
+            booksStatus[book] != Status.OUT
+        ) {
+            booksStatus[book] = Status.OUT
             0
         } else {
             -1
@@ -75,14 +75,10 @@ class LibraryImpl : LibraryInterface {
     }
 
     override fun inBook(book: Book): Int {
-        var isExist = false
-        for (b in books) {
-            if (b.number == book.number) {
-                isExist = true
-            }
-        }
-        return if (!isExist) {
-            books.add(book)
+        return if (books.contains(book) &&
+            booksStatus.containsKey(book) &&
+            booksStatus[book] != Status.IN
+        ) {
             booksStatus[book] = Status.IN
             0
         } else {
