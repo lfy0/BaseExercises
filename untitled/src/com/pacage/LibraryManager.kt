@@ -1,10 +1,10 @@
 package com.pacage
 
 
-class LibraryManger : LibraryInterface {
+class LibraryManager private constructor() : LibraryInterface, LibraryStatusInf {
 
     companion object {
-        var holder = LibraryManger()
+        val holder = LibraryManager()
     }
 
     private var libraryImpl: LibraryImpl = LibraryImpl()
@@ -13,11 +13,11 @@ class LibraryManger : LibraryInterface {
         return libraryImpl.addBook(book)
     }
 
-    override fun findBook(index: Int): Book {
+    override fun findBook(index: Int): Book? {
         return libraryImpl.findBook(index)
     }
 
-    override fun findBook(name: String): Book {
+    override fun findBook(name: String): Book? {
         return libraryImpl.findBook(name)
     }
 

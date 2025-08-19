@@ -1,43 +1,37 @@
 package com.pacage
 
 
-class LibraryImpl : LibraryInterface {
+class LibraryImpl : LibraryInterface, LibraryStatusInf {
 
     private var books = mutableListOf<Book>()
-    private var booksStatus = mutableMapOf<Book, Status>()
+    private var booksStatus = mutableMapOf<Int, Status>()
 
     override fun addBook(book: Book): Int {
-        var isExist = false
-        for (b in books) {
-            if (b.number == book.number) {
-                isExist = true
-            }
-        }
-        return if (!isExist) {
-            books.add(book)
-            booksStatus[book] = Status.IN
-            0
-        } else {
+        return if (books.any { it.number == book.number }) {
             -1
+        } else {
+            books.add(book)
+            booksStatus[book.number] = Status.IN
+            0
         }
     }
 
-    override fun findBook(index: Int): Book {
+    override fun findBook(index: Int): Book? {
         for (b in books) {
             if (b.number == index) {
                 return b
             }
         }
-        return Book(-1, "", "", "")
+        return null
     }
 
-    override fun findBook(name: String): Book {
+    override fun findBook(name: String): Book? {
         for (b in books) {
             if (b.title == name) {
                 return b
             }
         }
-        return Book(-1, "", "", "")
+        return null
     }
 
     override fun showAllBooks(): List<Book> {
@@ -45,29 +39,25 @@ class LibraryImpl : LibraryInterface {
     }
 
     override fun deleteBook(index: Int): Int {
-        for (b in books) {
-            if (b.number == index) {
-                books.remove(b)
-                booksStatus.remove(b)
-                return 0;
-            }
-        }
-        return -1;
+        val book = books.find { it.number == index } ?: -1
+        books.remove(book)
+        booksStatus.remove(book)
+        return 0
     }
 
     override fun checkBookStatus(b: Book): Status {
-        if (booksStatus.containsKey(b)) {
-            return booksStatus[b]!!
+        if (booksStatus.containsKey(b.number)) {
+            return booksStatus[b.number]!!
         }
         return Status.OUT
     }
 
     override fun outBook(book: Book): Int {
         return if (books.contains(book) &&
-            booksStatus.containsKey(book) &&
-            booksStatus[book] != Status.OUT
+            booksStatus.containsKey(book.number) &&
+            booksStatus[book.number] != Status.OUT
         ) {
-            booksStatus[book] = Status.OUT
+            booksStatus[book.number] = Status.OUT
             0
         } else {
             -1
@@ -76,10 +66,10 @@ class LibraryImpl : LibraryInterface {
 
     override fun inBook(book: Book): Int {
         return if (books.contains(book) &&
-            booksStatus.containsKey(book) &&
-            booksStatus[book] != Status.IN
+            booksStatus.containsKey(book.number) &&
+            booksStatus[book.number] != Status.IN
         ) {
-            booksStatus[book] = Status.IN
+            booksStatus[book.number] = Status.IN
             0
         } else {
             -1

@@ -1,12 +1,12 @@
 package com.pacage
 
-interface LibraryInterface: LibraryStatusInf {
+interface LibraryInterface{
 
     fun addBook(book: Book): Int
 
-    fun findBook(index: Int): Book
+    fun findBook(index: Int): Book?
 
-    fun findBook(name: String): Book
+    fun findBook(name: String): Book?
 
     fun showAllBooks(): List<Book>
 
