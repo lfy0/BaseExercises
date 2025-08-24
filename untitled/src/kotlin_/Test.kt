@@ -71,7 +71,7 @@ fun main() {
     println("no：${MyClass.no}")
     MyClass.foo()
 }
-class MyClass{
+open class MyClass{
     companion object{}
 }
 

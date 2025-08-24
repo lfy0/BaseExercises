@@ -1,11 +1,16 @@
 package java_;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("不换门选中次数：" + test(true));
         System.out.println("换门选中次数：" +test(false));
+        List<String> strList = List.of("a", "b","c");
+        List<Integer> intList = List.of(1, 2);
+
     }
 
     static int[] arr = new int[3];
@@ -41,6 +46,6 @@ public class Main {
     }
 
     void fun() {
-        Sign.getInstance().fun();
+        //Sign.getInstance().fun();
     }
 }

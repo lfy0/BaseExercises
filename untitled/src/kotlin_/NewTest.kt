@@ -1,6 +1,10 @@
 package kotlin_
 
+import com.pacage.Book
+import com.sun.jdi.Value
+import java.util.Random
 import java.util.Stack
+import javax.swing.text.View
 
 class NewTest {
 
@@ -50,18 +54,202 @@ fun main() {
     testExMethod()
 
     testDataMethod()
+
+    testFMethod()
+
+    testEnumMethod()
+    
+}
+
+fun testEnumMethod() {
+
+    //基本枚举写法
+
+    //初始化写法 成员属性和 非成员属性的写法
+
+    //支持覆盖方法
+
+    //enumValues<T>() 和 enumValueOf<T>() 的使用
+
+}
+
+open class Box<T>(t: T) {
+    val value = t
+}
+
+fun <T> box(t: T): T {
+    println(t)
+    return t
+}
+
+open class MyBox<T : Box<T>>(t: T) : Comparable<T> {
+    val value = t
+    override fun compareTo(other: T): Int {
+        return if (Random().nextInt() > 0.5) {
+            -1
+        } else {
+            1
+        }
+    }
+}
+fun <T: Comparable<T>> listFun(t: List<T>): List<T> {
+    return t
+}
+
+fun <T> myFun(t: T) where T : Any, T : Comparable<T> {
+    println(t)
+}
+
+class Data<T>(t: T) : Comparable<T> {
+
+    override fun compareTo(other: T): Int {
+        return 0
+    }
+
+}
+
+//class ConcreteMyBox: MyBox<ConcreteMyBox>(this)
+
+fun <T> copyWhenGreater(list: List<T>, target: T): List<String> where T : CharSequence, T : Comparable<T> {
+    return list.filter { it > target }.map { it.toString() }
+}
+
+
+
+fun testFMethod() {
+    println("------------------------------")
+    //创建一个泛型对象
+    val box1 = Box<Int>(1)
+    val box2 = Box<String>("string")
+    val box3 = Box(2)
+    println(box1.value)
+    println(box2.value)
+    println(box3.value)
+    //泛型对象的使用
+
+    //泛型对象内容可以写也可以省略
+
+    //泛型函数的创建
+    val b = box(Box("string"))
+    println(b.value)
+    //泛型约束条件
+    val list = listFun(listOf(1, 2, 3))
+    println(list)
+    //泛型可以有多个约束
+    myFun(Data(1))
+    val result = copyWhenGreater(listOf("1", "2"), "1")
+    println(result)
+    //协变和逆变
+    val myType = MyType("123")
+    println("value: " + myType.getValue())
+    val myType2 = MyType2("234")
+    myType2.setValue("2222")
+    //声明处形变
+
+    var w3School = W3School<Any>(123)
+    val w3School2 = W3School("456")
+    w3School = w3School2//协变
+    println(w3School.foo())
+
+    val w3School3 = W3School2<Any>("abc")
+    var w3School4 = W3School2<String>("def")
+    w3School4 = w3School3//逆变 子类接收父类
+    println("逆变")
+    w3School4.foo("ccc")
+
+    val func: Function<Int, *> = IntToStringFunction()
+    val result2: Any? = func.invoke(1)
+
+
+
+}
+
+class IntToStringFunction: Function<Int,String> {
+
+    override fun invoke(a: Int): String = a.toString()
+
+}
+
+interface Function<in A, out B> {
+    fun invoke(a: A): B
+}
+
+class W3School2<in A>(private var a: A) {
+
+    fun foo(a: A) {
+        println(this.a)
+        println(a)
+    }
+}
+
+class W3School<out A>(private val a: A) {
+    fun foo(): A {
+        return this.a
+    }
+}
+
+
+
+class MyType<out T : CharSequence>(t: T) {
+
+    private val value = t
+
+    fun getValue(): T {
+        return value
+    }
+
+    fun setValue(v: @UnsafeVariance T) {
+
+    }
+}
+
+class MyType2<in T : CharSequence>(t: T) {
+
+    fun setValue(t: T) {
+
+    }
+
+}
+
+
+
+data class MyUser(val name: String, val age: Int)
+
+sealed class MyClass1 {
+
+    data class Data(val name: String) : MyClass1()
+    data class Data2(val age: Int) : MyClass1()
+    data class Data3(val phone: String) : MyClass1()
+    object Data4 : MyClass1()
+
+    fun eqil(myClass: MyClass1): Double = when (myClass) {
+        is Data -> 1.0
+        is Data2 -> 2.0
+        is Data3 -> 3.0
+        Data4 -> 4.0
+    }
 }
 
 fun testDataMethod() {
     //对象声明和拷贝
-
+    val user = MyUser(name = "张三", age = 2)
+    val user2 = user.copy(name = "李四", age = 1)
+    println(user)
+    println(user2)
     //对象结构方式提取
-
+    val (name, age) = user2
+    println("name $name age $age")
     // Pair 和 Triple 测试
-
+    val pair = Pair(2, 3)
+    val triple = Triple(1, "2", 3)
+    println(pair)
+    println(pair.first + pair.second)
+    println(triple)
+    println("${triple.first}  ${triple.second}  ${triple.third}")
     //密封类型
-
+    //var myClass = MyClass1()
 }
+
 
 open class D4 {
 
