@@ -196,8 +196,8 @@ class C(): A(), B {
         super<B>.f()
     }
 }
-open class Person111{
-    open fun study(){
+open class Person111 {
+    open fun study() {
         println("我毕业了")
     }
 }

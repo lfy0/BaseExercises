@@ -1,10 +1,7 @@
 package kotlin_
 
-import com.pacage.Book
-import com.sun.jdi.Value
-import java.util.Random
-import java.util.Stack
-import javax.swing.text.View
+import java.util.*
+import kotlin.reflect.full.memberProperties
 
 class NewTest {
 
@@ -61,16 +58,107 @@ fun main() {
     
 }
 
+enum class Color {
+    RED, BLUE, GREEN
+}
+
+enum class Share(val a: Int) {
+    AAA(0x11),
+    BBB(0x12),
+    CCC(0x13),
+    DDD(0x14),
+}
+
+enum class Flute(val f: String) {
+    Apple("苹果"),
+    Orging("橘子"),
+    Bannan("香蕉")
+}
+
+enum class Sing {
+    INFO {
+        override fun sign() = DEBUG
+    },
+    DEBUG {
+        override fun sign() = DEBUG
+    },
+    ERROR {
+        override fun sign() = DEBUG
+    };
+
+    abstract fun sign(): Sing
+}
+
+enum class Color2 {
+    RED, BLUE, GREEN
+}
+
+enum class Stage {
+    Spring,Suree,Autoum,Winthe
+}
+
+enum class HttpStatus(val status: Int, val msg: String) {
+    HTTP_NOT_FIND(404, "not fond"),
+    HTTP_SERVICE_ERROR_(500, "service exception!"),
+    HTTP_OK(200, "success!")
+}
+
+
+object EnumUtil {
+
+    inline fun <reified T : Enum<T>> printAllEnum() {
+        val values = enumValues<T>()
+        println(values.contentToString())
+        println("${T::class.simpleName} 的所有值 ${values.joinToString { it.toString() }}")
+    }
+
+    inline fun <reified T : Enum<T>> isViewaEnum(tName: String): Boolean {
+        return try {
+            enumValueOf<T>(tName)
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    //// 反射获取枚举的详细信息
+    inline fun <reified T : Enum<T>> getEnumDetails(): List<String> {
+        val enumArr = enumValues<T>()
+        return enumArr.map { enum ->
+            val status = T::class.memberProperties.find { it.name == "status" }?.get(enum)
+            val msg = T::class.memberProperties.find { it.name == "msg" }?.get(enum)
+            "status:$status         msg:$msg"
+        }
+    }
+
+}
+
 fun testEnumMethod() {
-
+    println("---------------")
     //基本枚举写法
-
+    val red = Color.RED
     //初始化写法 成员属性和 非成员属性的写法
-
+    println(Share.AAA.a)
+    val org = Flute.Orging
+    println(Flute.Apple)
+    println(Flute.Orging.name)
+    println(Flute.Orging.ordinal)
+    println(Flute.valueOf("Bannan"))
+    println(Flute.values().contentToString())
+    println(Flute.Orging.f)
     //支持覆盖方法
-
+    println(Sing.INFO.sign())
     //enumValues<T>() 和 enumValueOf<T>() 的使用
+    EnumUtil.printAllEnum<Color2>()
+    EnumUtil.printAllEnum<Stage>()
 
+    val redResult = EnumUtil.isViewaEnum<Color2>("RED2")
+    println("red:$redResult")
+
+    val status = EnumUtil.getEnumDetails<HttpStatus>()
+    status.forEach {
+        println(it)
+    }
 }
 
 open class Box<T>(t: T) {
