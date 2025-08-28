@@ -55,7 +55,13 @@ fun main() {
     testFMethod()
 
     testEnumMethod()
-    
+
+    testObjectMethod()
+}
+
+
+fun testObjectMethod() {
+    //匿名对象写法
 }
 
 enum class Color {
